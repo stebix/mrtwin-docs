@@ -1,0 +1,203 @@
+<h1 data-number="1" id="mrtwin-docs"><span
+class="header-section-number">1</span> MRTWin Docs</h1>
+<p><em>WIP @jsteb january 2024</em></p>
+<h2 data-number="1.1" id="general-notes"><span
+class="header-section-number">1.1</span> General Notes</h2>
+<p>At its core, the MRTWin framework and pipeline can be used to perform
+integrated MR sequence development and simulation of the MR images. The
+neat part of the pipeline is given by the ability to directly read in
+any valid <code>.seq</code> file and simulate the forward process.</p>
+<p>The sequence development part is handled via Pypulseq <a
+href="https://github.com/imr-framework/pypulseq">(GitHub
+Repository)</a>. The simulation part is handled via the
+<code>MRZeroCore</code> package <a
+href="https://github.com/MRsources/MRzero-Core">(GitHub Repository)</a>,
+where the ominous 👻 phase distribution graph (PDG) formalism is used.
+Peruse <a
+href="https://onlinelibrary.wiley.com/toc/15222594/0/0">Magnetic
+Resonance in Medicine Preview</a> site for the soon-to-be-released paper
+by Moritz Zaiss et al.</p>
+<p>The backend makes use of the tensor machinery and automatic
+differentiation engine of <a href="https://pytorch.org/">PyTorch</a>.
+The reconstruction of the data utilizes the <code>torchkbnufft</code>
+package <a href="https://github.com/mmuckley/torchkbnufft">(GitHub
+Repository)</a> to perform non-uniform Fast Fourier Transform with
+Kaiser-Bessel gridding in PyTorch.</p>
+<h2 data-number="1.2" id="usage-notes--julia-cluster-machines"><span
+class="header-section-number">1.2</span> Usage Notes @
+<code>julia</code> cluster machines</h2>
+<p>For ease of usage, we installed the MRTwin pipeline on the
+<code>julia</code> cluster machines. First gain access to the desired
+machine by following the tutorial written by Max. Basal access is
+usually achieved via <code>ssh</code> using the floating IP of the
+desired machine.</p>
+<table>
+<thead>
+<tr class="header">
+<th>Host Name</th>
+<th>Floating IP</th>
+<th>SSH Key Name</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>mrf1</td>
+<td>10.106.246.104</td>
+<td>mrf1_key.pem</td>
+</tr>
+<tr class="even">
+<td>mrf2</td>
+<td><em>unknown</em></td>
+<td><em>unknown</em></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>:warning<strong>Warning</strong> Currently, we all operate as the
+same user <code>ubuntu</code> on the various <code>julia</code> cluster
+machines. Make sure to not accidentally delete or corrupt any data of
+your colleagues 😱. Further, we have to coordinate the resources of the
+machines. It is a good idea to check that the machine you intend to use
+for your calculations is not currently occupied by a fellow researcher.
+Otherwise, resource fighting of the jobs/processes may dramatically slow
+down the computations. 🐌 You can check the current resource consumption
+in the terminal with the <code>htop</code> command. If either CPU usage
+or memory consumption is high, you may have to select another host 💻 or
+contact the colleague to stop being a resource hog 🐗.</p>
+</blockquote>
+<div class="warning">
+<div class="title">
+<p>Warning</p>
+</div>
+<p>Currently, we all operate as the same user <code>ubuntu</code> on the
+various <code>julia</code> cluster machines. Make sure to not
+accidentally delete or corrupt any data of your colleagues 😱. Further,
+we have to coordinate the resources of the machines. It is a good idea
+to check that the machine you intend to use for your calculations is not
+currently occupied by a fellow researcher. Otherwise, resource fighting
+of the jobs/processes may dramatically slow down the computations. 🐌
+You can check the current resource consumption in the terminal with the
+<code>htop</code> command. If either CPU usage or memory consumption is
+high, you may have to select another host 💻 or contact the colleague to
+stop being a resource hog 🐗.</p>
+</div>
+<h3 data-number="1.2.1" id="gui-method-"><span
+class="header-section-number">1.2.1</span> GUI Method 🌻🦋</h3>
+<p>You can use the <a
+href="https://en.wikipedia.org/wiki/Virtual_Network_Computing">virtual
+network computing (VNC)</a> protocol together with a suitable client
+(e.g. <a href="https://tigervnc.org/">TigerVNC</a>) to gain GUI access
+to one of the host machines. Then open a terminal session inside the
+Ubuntu GUI. Then you You should see something like the image below.</p>
+<p><img src="./assets/terminal-base.png"
+alt="Example for terminal layout" /></p>
+<p>Use the <code>conda</code> <a
+href="#enabling-the-correct-conda-environment">environment activation
+tutorial</a> to activate the <code>mrtwin</code> environment. Then you
+may use your desired development tool of choice, e.g. Spyder IDE
+(command <code>spyder</code>), Jupyter Notebooks (command
+<code>jupyter notebook</code> or <code>jupyter nbclassic</code>), VS
+Code (command <code>code</code>), etc. pp. to implement and simulate the
+new hottest MR sequence! 🔥 <img
+src="https://docs.spyder-ide.org/4/_images/mainwindow_default_1610.png"
+alt="Spyder IDE" /></p>
+<h3 data-number="1.2.2" id="hacker-method-"><span
+class="header-section-number">1.2.2</span> Hacker Method 👩‍💻👨‍💻</h3>
+<p>You can avoid the VNC protocol and sending GUI screen content over
+the network and setup a complete remote development environment! 🥳 This
+may provide a leaner setup and may be more responsive as well.</p>
+<p><img src="https://media.giphy.com/media/3knKct3fGqxhK/giphy.gif"
+alt="Hacker Way" /></p>
+<p>Depending on the desired development tools, you will set up the
+remote connection differently:</p>
+<h4 data-number="1.2.2.1" id="spyder-remote-setup"><span
+class="header-section-number">1.2.2.1</span> Spyder Remote Setup</h4>
+<p>See the Spyder docs to connect to a remote kernel running on the
+<code>julia</code> cluster. Tutorial: <a
+href="https://docs.spyder-ide.org/current/panes/ipythonconsole.html#connect-to-a-remote-kernel">Link</a>
+The advantages over full GUI transmission are similar to the ones
+specified in <a href="#jupyter-notebook-setup">jupyter notebook
+setup</a>.</p>
+<h4 data-number="1.2.2.2" id="vs-code-remote-setup"><span
+class="header-section-number">1.2.2.2</span> VS Code Remote Setup</h4>
+<p>Connect to the <code>julia</code> cluster VM via the VS Code remote
+module. This allows both classic file-based development and Jupyter
+notebook-based development inside VS Code. Tutorial: <a
+href="https://code.visualstudio.com/docs/remote/remote-overview">Link</a></p>
+<h4 data-number="1.2.2.3" id="jupyter-notebook-setup"><span
+class="header-section-number">1.2.2.3</span> Jupyter Notebook Setup</h4>
+<p>Upon gaining shell access to one of the <code>julia</code> cluster
+machines, you can start a headless Jupyter notebook server with the
+commands:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> notebook <span class="at">--no-browser</span> <span class="at">--port</span><span class="op">=</span><span class="va">$YOURPORT</span></span></code></pre></div>
+<p>for the most recent Jupyterlab notebook experience or</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">jupyter</span> nbclassic <span class="at">--no-browser</span> <span class="at">--port</span><span class="op">=</span><span class="va">$YOURPORT</span></span></code></pre></div>
+<p>for the classic Jupyter notebook experience. The server is headless
+due to the <code>--no-browser</code> flag and expects connections via a
+user-specified port <code>$YOURPORT</code> (i.e. a free port, specified
+as an integer between 0 and 65535). The browser-based notebook
+experience allows the usage of cool and interactive tools like <a
+href="https://ipywidgets.readthedocs.io/en/stable/"><code>ipywidgets</code></a>
+to live-modify sequence and simulation parameters! To access the
+notebook in your local browser, you have to create a <code>ssh</code>
+tunnel that correctly connects your local machine to the remote cluster
+machine where the <code>jupyter</code> notebook server runs.</p>
+<h5 data-number="1.2.2.3.1" id="creating-a-ssh-tunnel"><span
+class="header-section-number">1.2.2.3.1</span> Creating a
+<code>ssh</code> tunnel</h5>
+<p>When you want to access the <code>jupyter notebook</code> in your
+local browser (i.e. the <code>hacker</code> way ;)) then you need to
+create a <code>ssh</code> tunnel such that the network traffic is
+forwarded to the <code>jupyter server</code> on the remote
+<code>julia</code> cluster machine. The command to start the
+<code>ssh</code> tunnel is</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh</span> <span class="at">-N</span> <span class="at">-f</span> <span class="at">-L</span>  <span class="va">$LOCALPORT</span>:localhost:<span class="va">$YOURPORT</span>:localhost username@hostname</span></code></pre></div>
+<p>where the <code>$LOCALPORT</code> is the one you want to access on
+your local machine (it is advisable to use
+<code>$LOCALPORT == $YOURPORT</code> for ease of use) and
+<code>$YOURPORT</code> is the chosen port the
+<code>jupyter server</code> is listening to. Use the login credentials
+for the <code>mrf</code> cluster machine that were given to you by Max
+or Jannik. The arguments do the following: <code>-N</code> makes that no
+remote command is executed since the connection is established only for
+port forwarding, <code>-f</code> ensures that the tunnel is run
+continuously in the background and <code>-L</code> specifies that the
+given port on the local (client) host is to be forwarded to the given
+host and port on the remote side. Many of these steps can be automated
+via the <code>~/.ssh/config</code> file such that you do not have to
+type them again or recall them tediously via your shell history. See
+e.g. the <a href="https://linux.die.net/man/1/ssh"><code>ssh</code>
+manpages</a>. If everything is working, you can access the
+<code>jupyter notebook</code> environment in your local browser under
+the address <code>localhost:$LOCALPORT</code>.</p>
+<h3 data-number="1.2.3"
+id="enabling-the-correct-conda-environment"><span
+class="header-section-number">1.2.3</span> Enabling the correct
+<code>conda</code> environment</h3>
+<p>The <code>julia</code> cluster machines should have
+<code>conda</code> preinstalled. If not the case, contact <a
+href="jannik.stebani@uni-wuerzburg.de">Jannik</a> for bugfixing 🐛🧰
+purposes. In the bash terminal, you should see the <code>conda</code>
+environment prefix, in the above example <code>(base)</code>, your user
+name (here <code>ubuntu</code>) and the current host name (here
+<code>mrf1</code>). Before starting off, you have to activate the
+correct <code>conda</code> environment to be able to access all package
+elements of the MRTwin. For this, you should activate the preinstalled
+environment <code>mrtwin</code> with the command</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate mrtwin</span></code></pre></div>
+<p>A list of all <code>conda</code> environments can be printed via the
+command <code>conda env list</code>. The successful activation of the
+<code>conda</code> environment is reflected in the changed environment
+prefix in front of the user name and host name specification.</p>
+<p><img src="./assets/terminal-conda.png"
+alt="Exemplary conda environment activation" /></p>
+<h2 data-number="1.3" id="help"><span
+class="header-section-number">1.3</span> Help</h2>
+<p>If you still have problems or open questions, ask Jannik for tech
+support</p>
+<p><img src="https://media.giphy.com/media/3rgXBA5xQKhWHThSj6/giphy.gif"
+alt="Tech support" /></p>
